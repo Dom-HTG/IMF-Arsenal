@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction, Application } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
+import { InitializeDataSource, RegisterRoutes } from "./server";
 
 const app: Application = express();
 
@@ -9,6 +10,16 @@ const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(cors(corsConfig));
+
+(()=>{
+    // Initialize typeorm data source.
+    InitializeDataSource();
+
+    // Register routes.
+    RegisterRoutes(app);
+
+    
+})()
 
 // Healthcheck.
 app.get("/healthcheck", (_req: Request, res: Response) => {
