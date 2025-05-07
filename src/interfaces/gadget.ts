@@ -12,7 +12,10 @@ export class Gadget {
     @Column({
         type: "enum",
         enum: Status,
-        default: Status.AVAILABLE  // Set default status of gadget to 
+        default: Status.AVAILABLE  // Set default status of gadget to available.
     })
     status!: Status;
+
+    @Column()
+    decommissionedAt!: Date | null; // Nullable field.
 };

@@ -1,6 +1,7 @@
 import { DataSource, UpdateResult } from "typeorm";
 import { AppDataSource } from "../store/datasource";
 import { Gadget } from "../interfaces/gadget";
+import { Status } from "../interfaces/interface";
 
 export class GadgetRepository {
     private AppDataSource: DataSource = AppDataSource;
@@ -25,6 +26,20 @@ export class GadgetRepository {
             return updatedGadget;
         }
     };
+
+    public async RemoveGadget(gadgetId: string): Promise<boolean> {
+        if (typeof gadgetId !== "string") throw new Error("Gadget not found");
+        const gadget = await this.AppDataSource.getRepository(Gadget).findOneBy({ id: gadgetId });
+        if (!gadget) {
+            throw new Error("Gadget not found");
+        } else {
+            const _ = await this.AppDataSource.getRepository(Gadget).update(gadgetId, {
+                status: Status.DECOMMISSIONED,
+                decommissionedAt: new Date()
+            });
+            return true; // returns true if decommissioned successfully and false if not.
+        };
+    };
 };
 
 
@@ -34,7 +49,7 @@ export class GadgetRepository {
 // });
 
 // // Removes gadget from the inventory.
-// // Marks the status of the gadget as decommissioned and adds a timestamp.
+// Marks the status of the gadget as decommissioned and adds a timestamp.
 // app.delete("/gadgets/:id", (req: Request, res: Response) => {
 
 // });
