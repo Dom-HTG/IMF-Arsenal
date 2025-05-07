@@ -40,22 +40,15 @@ export class GadgetRepository {
             return true; // returns true if decommissioned successfully and false if not.
         };
     };
+
+    public async SelfDestructGadget(gadgetId: string): Promise<boolean> {
+        if (typeof gadgetId !== "string") throw new Error("Gadget not found");
+        const destructedGadget = await this.AppDataSource.getRepository(Gadget).delete({ id: gadgetId });
+        if (destructedGadget.affected === 0) {
+            throw new Error("Gadget not found");
+        } else {
+            return true; // returns true if gadget is destroyed successfully and false if not.
+        };
+    };
+
 };
-
-
-// // Updates an existing gadgets' information.
-// app.put("/gadgets/:id", (req: Request, res: Response) => {
-
-// });
-
-// // Removes gadget from the inventory.
-// Marks the status of the gadget as decommissioned and adds a timestamp.
-// app.delete("/gadgets/:id", (req: Request, res: Response) => {
-
-// });
-
-// // Self destruct.
-// // Requires a randomly generated confirmation code.
-// app.post("/gadget/:id/self-destruct", (req: Request, res: Response) => {
-
-// });
